@@ -1,11 +1,12 @@
 local env = require("typedef.env")
-local data_dir = vim.fn.stdpath("data") .. "/typedef"
-local binary_name = "typedef-rpc"
-local binary_path = data_dir .. "/" .. binary_name
-local repo_name = "exanubes/typedef"
+local config = require("typedef.config")
+local data_dir = config.data_dir
+local binary_name = config.binary_name
+local binary_path = config.binary_path
+local repo_name = config.repo_name
 
 local function has_rpc_binary()
-    return vim.fn.executable(binary_path) ~= 1
+    return vim.fn.executable(binary_path) == 1
 end
 
 local function get_binary_version()
@@ -25,12 +26,16 @@ local function get_binary_version()
 end
 
 local function compare(expected, received)
+    if expected.version == "dev" then
+        return true, ""
+    end
+
     if expected.version ~= received.version then
-        return false, "Expected: " .. expected.version .. ", received: " .. received.version
+        return false, "Expected version: " .. expected.version .. ", received: " .. received.version
     end
 
     if expected.commit ~= received.commit then
-        return false, "Expected: " .. expected.commit .. ", received: " .. received.commit
+        return false, "Expected commit: " .. expected.commit .. ", received: " .. received.commit
     end
 
     return true, ""
@@ -177,17 +182,17 @@ return function()
         return
     end
 
-    local okx, _ = xpcall(download_and_install, function(error)
+    local okx, err = xpcall(download_and_install, function(error)
         return debug.traceback(error, 2)
     end)
 
     if not okx then
-        vim.notify("Failed to install rpc binary", vim.log.levels.ERROR)
+        error("Failed to install rpc binary: " .. tostring(err), vim.log.levels.ERROR)
     end
 
-    local ok2, result2 = pcall(verify_binary)
+    local ok2, _ = pcall(verify_binary)
 
     if not ok2 or not result2 then
-        error("Installed binary failed verification: " .. result2)
+        error("Installed binary failed verification")
     end
 end
