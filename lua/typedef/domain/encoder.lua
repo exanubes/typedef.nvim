@@ -1,0 +1,3 @@
+---@class Encoder
+---@field encode fun(data: table): string
+---@field decode fun(data: string): table | nil
