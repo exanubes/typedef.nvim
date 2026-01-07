@@ -118,7 +118,7 @@ local function create_download_url(artifact_name, version)
         error("version is missing; cannot determine which release to download")
     end
 
-    return string.format("https://github.com/%s/releases/download/%s/%s", repo_name, version, artifact_name)
+    return string.format("https://github.com/%s/releases/download/v%s/%s", repo_name, version, artifact_name)
 end
 
 local function create_asset_name(os, arch)
