@@ -24,10 +24,10 @@ local function get_binary_version()
 
     return { version = info.version or "", commit = info.commit_sha or "", created_at = info.build_time or "" }, true
 end
-
+--- TODO: Replace vim.notify with custom logger that does not block the UI
 local function compare(expected, received)
     if expected.version == "dev" then
-        vim.notify("Dev mode detected, skipping version verification", vim.log.levels.WARN)
+        -- vim.notify("Dev mode detected, skipping version verification", vim.log.levels.WARN)
         return true, ""
     end
 
@@ -43,35 +43,35 @@ local function compare(expected, received)
 end
 
 local function verify_binary()
-    vim.notify("Verifying binary at: " .. binary_path, vim.log.levels.DEBUG)
+    -- vim.notify("Verifying binary at: " .. binary_path, vim.log.levels.DEBUG)
 
     local has_binary = has_rpc_binary()
     if not has_binary then
-        vim.notify("Binary not found", vim.log.levels.DEBUG)
+        -- vim.notify("Binary not found", vim.log.levels.DEBUG)
         return false
     end
 
     local binary_version, ok = get_binary_version()
 
     if not ok then
-        vim.notify("Failed to get binary version", vim.log.levels.DEBUG)
+        -- vim.notify("Failed to get binary version", vim.log.levels.DEBUG)
         return false
     end
 
-    vim.notify(
-        string.format("Binary version: %s, commit: %s", binary_version.version, binary_version.commit),
-        vim.log.levels.DEBUG
-    )
-    vim.notify(string.format("Expected version: %s, commit: %s", env.version, env.commit), vim.log.levels.DEBUG)
+    -- vim.notify(
+    --     string.format("Binary version: %s, commit: %s", binary_version.version, binary_version.commit),
+    --     vim.log.levels.DEBUG
+    -- )
+    -- vim.notify(string.format("Expected version: %s, commit: %s", env.version, env.commit), vim.log.levels.DEBUG)
 
     local ok2, err = compare(env, binary_version)
 
     if not ok2 then
-        vim.notify("Version mismatch: " .. err, vim.log.levels.ERROR)
+        -- vim.notify("Version mismatch: " .. err, vim.log.levels.ERROR)
         error(err)
     end
 
-    vim.notify("Binary verification successful", vim.log.levels.DEBUG)
+    -- vim.notify("Binary verification successful", vim.log.levels.DEBUG)
     return true
 end
 
@@ -195,12 +195,12 @@ return function()
         return
     end
 
-    local okx, err = xpcall(download_and_install, function(error)
+    local okx, _ = xpcall(download_and_install, function(error)
         return debug.traceback(error, 2)
     end)
 
     if not okx then
-        vim.notify("Failed to install rpc binary: " .. tostring(err), vim.log.levels.ERROR)
+        error("Failed to install rpc binary: ", vim.log.levels.ERROR)
     end
 
     local ok2, result2 = pcall(verify_binary)

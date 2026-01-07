@@ -1,4 +1,5 @@
 local json_driver = require("typedef.drivers.json")
+local panel_driver = require("typedef.drivers.panel")
 local json_encoder = require("typedef.infrastructure.encoder")
 
 local Rpc = require("typedef.infrastructure.rpc")
@@ -11,6 +12,7 @@ function M.register(config)
     local rpc = Rpc.new(config.rpc_server_binary)
     local server = Server.new(rpc, json_encoder)
     json_driver.register(server)
+    panel_driver.register(server)
 end
 
 return M

@@ -1,4 +1,5 @@
 local Promise = require("typedef.helpers.promise")
+local codegen = require("typedef.domain.codegen")
 
 local Repository = {
     --- @type RpcClient
@@ -16,7 +17,8 @@ end
 ---@param input_type string
 ---@param format string
 function Repository:generate(input, input_type, format)
-    local response = self.client:send("codegen", { input = input, input_type = input_type, format = format })
+    local response =
+        self.client:send("codegen", { input = input, input_type = input_type, format = codegen.parse_format(format) })
     local result = Promise.new()
 
     response
