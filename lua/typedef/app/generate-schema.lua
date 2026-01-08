@@ -3,16 +3,13 @@ local GenerateSchemaService = {
     input = nil,
     --- @type CodegenRepository
     codegen = nil,
-    ---@type OutputWriter
-    writer = nil,
 }
 GenerateSchemaService.__index = GenerateSchemaService
 
-function GenerateSchemaService.new(reader, repository, writer)
+function GenerateSchemaService.new(reader, repository)
     return setmetatable({
         input = reader,
         codegen = repository,
-        output = writer,
     }, GenerateSchemaService)
 end
 
@@ -22,7 +19,6 @@ function GenerateSchemaService:generate(format, cb)
     local response = self.codegen:generate(input, "json", format)
 
     response:on_success(function(result)
-        self.output:write(result.code)
         if cb then
             cb()
         end

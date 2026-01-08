@@ -1,4 +1,0 @@
----@class Panel
----@field render fun(self: Panel, lines: string[])
----@field add_keymap fun(self: Panel, key: string, callback: fun(event: {key: string; buffer: integer; window: integer; current_line: integer}))
----@field close fun(self: Panel)

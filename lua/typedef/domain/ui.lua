@@ -1,0 +1,11 @@
+---@class Component
+---@field render fun(self: Component, lines: string[])
+---@field add_keymap fun(self: Component, key: string, callback: fun(event: {key: string; buffer: integer; window: integer; current_line: integer}))
+---@field close fun(self: Component)
+---@field focus fun(self: Component)
+---@field open fun(self: Component)
+---
+---@class View
+---@field open fun(buffer: integer): integer window
+---@field close fun(window: integer)
+---@field focus fun(window: integer)

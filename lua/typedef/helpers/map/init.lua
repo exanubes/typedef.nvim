@@ -4,6 +4,7 @@
 ---@field get fun(self: Map, key: string): any
 ---@field has fun(self: Map, key: string): boolean
 ---@field remove fun(self: Map, key: string)
+---@field values fun(self: Map): table
 
 local Map = {}
 Map.__index = Map
@@ -26,6 +27,15 @@ end
 
 function Map:remove(key)
     self._data[key] = nil
+end
+
+function Map:values()
+    local values = {}
+    for _, value in pairs(self._data) do
+        table.insert(values, value)
+    end
+
+    return values
 end
 
 return Map

@@ -1,8 +1,9 @@
+local List = {}
 --- @param source_table table<string>
 --- @param new_items table<string>
 --- @param position? integer exact position in the source_table where the first element from the new_items table should be placed
 --- @return table<string>
-return function(source_table, new_items, position)
+function List.splice(source_table, new_items, position)
     if position == nil then
         position = #source_table
     end
@@ -21,3 +22,28 @@ return function(source_table, new_items, position)
 
     return source_table
 end
+
+--- @param ... table<string>[]
+--- @return table<string>
+function List.join(...)
+    local result = {}
+    for _, list in ipairs({ ... }) do
+        for _, value in ipairs(list) do
+            table.insert(result, value)
+        end
+    end
+    return result
+end
+
+--- @param input string
+--- @param separator string
+function List.split(input, separator)
+    separator = separator or "\\n"
+    local t = {}
+    for str in string.gmatch(input, "([^" .. separator .. "]+)") do
+        table.insert(t, str)
+    end
+    return t
+end
+
+return List

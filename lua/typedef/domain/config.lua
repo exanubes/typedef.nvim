@@ -1,2 +1,3 @@
 ---@class TypedefConfig
 ---@field rpc_server_binary? string path to the rpc server binary
+---@field view? "vsplit" | "sidebar" path to the rpc server binary

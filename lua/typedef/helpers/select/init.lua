@@ -1,3 +1,4 @@
+local Map = require("typedef.helpers.map")
 local Select = { options = {} }
 Select.__index = Select
 
@@ -6,6 +7,7 @@ function Select.new(options)
     return setmetatable({
         options = options,
         current = 1,
+        keymaps = Map.new(),
     }, Select)
 end
 
@@ -36,11 +38,19 @@ function Select:print()
         if index == self.current then
             table.insert(lines, "(*) " .. option)
         else
-            table.insert(lines, "( ) " .. option)
+            local keymap = self.keymaps:get(index)
+            local radio_button = ("(%s) "):format(keymap or " ")
+            table.insert(lines, radio_button .. option)
         end
     end
 
     return lines
+end
+
+---@param keymap string
+---@param index integer
+function Select:add_keymap(keymap, index)
+    self.keymaps:set(index, keymap)
 end
 
 return Select
