@@ -1,5 +1,5 @@
 return {
-  version = "0.0.21",
-  commit  = "b33e9f0",
-  build   = "2026-01-10T14:29:40Z"
+  version = "0.0.22",
+  commit  = "ec1d3a7",
+  build   = "2026-01-11T13:10:19Z"
 }
